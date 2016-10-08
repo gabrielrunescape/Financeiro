@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title><%= title %></title>
+        <link rel="stylesheet" href="/css/bootstrap.min.css" />
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+
+        <link href="http://getbootstrap.com/examples/offcanvas/offcanvas.css" rel="stylesheet">
+        <link href="https://almsaeedstudio.com/themes/AdminLTE/dist/css/AdminLTE.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <nav class="nav navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">WebFinanceiro - API</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <h4> Bem-vindo à API do WebPonto. Você pode obter todos os dados de acordo com a API para uso interno das informações</h4>
+
+            <h2 class="sub-header">Escolha o método e categoria a ser vista</h2>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Método</th>
+                            <th>URL</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>GET</td>
+                            <td>/api/Usuarios</td>
+                            <td>Busca todos os usuários</td>
+                        </tr>
+                        <tr>
+                            <td>POST</td>
+                            <td>/api/Usuarios</td>
+                            <td>Cria um novo usuário</td>
+                        </tr>
+                        <tr>
+                            <td>DELETE</td>
+                            <td>/api/Usuarios/:id</td>
+                            <td>Apaga um usuário pela ID</td>
+                        </tr>
+                        <tr>
+                            <td>POST</td>
+                            <td>/api/Usuarios/:id</td>
+                            <td>Busca um usuário pela ID</td>
+                        </tr>
+                        <tr>
+                            <td>PUT</td>
+                            <td>/api/Usuarios/:id</td>
+                            <td>Altera um dsuário pela ID</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

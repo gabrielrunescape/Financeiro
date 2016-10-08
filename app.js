@@ -9,6 +9,7 @@ var favicon      = require('serve-favicon');
 
 var routes = require('./routes/index');
 var users  = require('./routes/users');
+var API    = require('./routes/api');
 
 var app = express();
 
@@ -43,6 +44,7 @@ app.use(cookieParser());
 // Define as rotas da aplicação
 app.use('/', routes);
 app.use('/users', users);
+app.use('/api', API);
 
 // Porta da aplicação
 app.set('port', (process.env.PORT || 3000));
