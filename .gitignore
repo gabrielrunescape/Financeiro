@@ -37,6 +37,7 @@ jspm_packages
 .bak
 
 #diretórios a serem ignorados
+dist/
 node_modules/
 
 # Optional REPL history
