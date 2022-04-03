@@ -2,26 +2,27 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import Api from "./api.jsx";
-import Error from "./error.jsx";
-import Layout from "./layout.jsx";
-
-const App = () => (
-  <>
-    <div className="container mt-4">
-      <h1 className="title">Bem-vindo !</h1>
-    </div>
-  </>
-);
+import Error from "../pages/error.jsx";
+import Api from "../pages/api/index.jsx";
+import Layout from "../views/layout.jsx";
+import HomePage from "../views/home.jsx";
+import { IndexUsuarios, UsuarioID } from "../pages/api/usuarios.jsx";
 
 const LesRoutes = () => (
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route index element={<App />}/>
+        <Route index element={<HomePage />}/>
         <Route path="*" element={<Error />} />
-        <Route path="api" element={<Api />} />
-         
+
+        <Route path="api">
+          <Route index element={<Api />} />
+          
+          <Route path="usuarios" >
+            <Route index element={<IndexUsuarios />} />
+            <Route path=":userID" element={<UsuarioID />} />
+          </Route>
+        </Route>
       </Route>
     </Routes>
   </BrowserRouter>
