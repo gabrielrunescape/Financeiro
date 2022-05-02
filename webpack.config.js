@@ -5,7 +5,7 @@ const webpack = require('webpack');
 module.exports = {
     mode: 'development',
     entry: {
-        main: path.resolve(__dirname, './routes/index.js'),
+        main: path.resolve(__dirname, './app.js'),
     },
     output: {
         path: path.resolve(__dirname, './dist'),
@@ -17,13 +17,19 @@ module.exports = {
             template: path.resolve(__dirname, './public/template.html'), // template file
             filename: 'index.html', // output file
         }),
-        new webpack.HotModuleReplacementPlugin(),
     ],
     module: {
         rules: [{
             test: /\.(js|jsx)$/,
             exclude: /node_modules/,
             use: ['babel-loader'],
+        }, {
+            test: /\.s[ac]ss$/,
+            use: [
+                'css-loader',
+                'sass-loader',
+                'style-loader',
+            ],
         }],
     },
     devServer: {
