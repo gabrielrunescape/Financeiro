@@ -1,26 +1,30 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import SignUp from "../pages/signup.jsx";
-import SignIn from "../pages/signin.jsx";
 import Dashboard from "../pages/Dashboard/index.jsx";
-
 import Layout from "../components/layout.jsx";
 import Private from "../components/private.js";
+import SignIn from "../pages/signin.jsx";
+import SignUp from "../pages/signup.jsx";
 
 import { AuthProvider } from "../contexts/auth.js";
 
+/**
+ * Define routes to app
+*/
 export const AppRoutes = () => {
   return (
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-          <Route path="/" element={<Layout />}>
+          <Route path="/">
             <Route index element={<Private><Dashboard /></Private>}/>
             <Route path="signup" element={<SignUp />}/>
             <Route path="signin" element={<SignIn />}/>
 
-            <Route path="/dashboard" element={<Dashboard />} />            
+            <Route path="/dashboard" element={<Layout />}>
+              <Route index element={<Dashboard />} />
+            </Route>
           </Route>
         </Routes>
       </AuthProvider>

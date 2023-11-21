@@ -1,7 +1,22 @@
 @charset "utf-8";
-@import "../../node_modules/bulma/bulma.sass";
-@import '../../node_modules/font-awesome/scss/font-awesome.scss';
+
+@import "../../node_modules/bulma/sass/utilities/initial-variables";
+@import "../../node_modules/bulma/sass/utilities/functions";
 
 $purple: #962a69;
 $purple-dark: #792455;
 $purple-light: #a75b87;
+
+$background: #f3f5f7;
+$primary_colour: #188ef5;
+$secondary_colour: #4ec037;
+$text_colour: #acafb1;
+
+// Update Bulma's global variables
+$body-background-color: $background;
+$link: $primary_colour;
+$primary: $secondary_colour;
+
+
+@import "../../node_modules/bulma/bulma.sass";
+@import '../../node_modules/font-awesome/scss/font-awesome.scss';

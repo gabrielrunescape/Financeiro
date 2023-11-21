@@ -1,0 +1,27 @@
+.background_image {
+    background-attachment: scroll;
+    background-image: url("/img/pexels-pixabay-53621.jpg");
+    background-origin: padding-box;
+    background-clip: border-box;
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.hero_transparent {
+    background-color: #ffffff55
+}
+
+.transparent_container {
+    background-color: #FFFFFFAA
+}
+
+.width_input {
+    min-width: 100%;
+    border-radius: 32px;
+}
+
+.horizontal_line {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #929292;
+}

@@ -1,10 +1,17 @@
 import { useNavigate } from "react-router-dom";
-import { firebaseApp } from "../config/firebase_config";
-
 import React,  { createContext, useEffect, useState } from "react";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
 
-const errorAuthenticatioin = message => {
+import { firebaseApp } from "../config/firebase_config";
+import Usuario from "../model/usuario";
+
+/**
+ * Get Firebase error message
+ * 
+ * @param {string} message Kind of firebase error
+ * @returns Translated message
+ */
+const errorAuthentication = message => {
     switch(message) {
         case "Firebase: Error (auth/wrong-password).":
             return "Usuário ou senha incorreto.";
@@ -16,15 +23,23 @@ const errorAuthenticatioin = message => {
             return "E-mail inválido!";
         case "Firebase: Error (auth/internal-error).":
             return "Ocorreu um erro internet. Por favor tente novamente."
+        case "Firebase: Error (auth/missing-password).":
+            return "O campo de senha não deve estar em branco!";
         default:
             return "Erro desconhecido. \n" + message;
     }
 }
 
+/**
+ * Firebase Authentical process
+ * 
+ * @param {*} param0 None
+ * @returns Exporter from all methods used
+ */
 export const AuthProvider = ({children}) => {
     const navigate = useNavigate();
     
-    const [user, setUser] = useState(null);
+    const [user = Usuario, setUser = Usuario] = useState(null);
     const [loading, setLoading] = useState(true);
     const [failMessage, setFailMessage] = useState(null);
 
@@ -32,73 +47,97 @@ export const AuthProvider = ({children}) => {
         const recoverUser = sessionStorage.getItem("@AuthFirebase:user");
 
         if (recoverUser) {
-            setUser(JSON.parse(recoverUser));
+            const user = new Usuario(recoverUser);
+            setUser(user);
         }
 
         setLoading(false);
     }, []);
 
+    /**
+     * Log-in with email and password
+     * 
+     * @param {string} email E-mail address
+     * @param {string} senha Password
+     */
     const signInEmail = (email, senha) => {        
         signInWithEmailAndPassword(firebaseApp, email, senha) 
             .then((userCredential) => {
-                const userResult = userCredential.user;
+                const user = new Usuario(userCredential.user);
                 
-                setUser(userResult);
+                setUser(user);
                 setFailMessage(null);
 
-                sessionStorage.setItem("@AuthFirebase:user", JSON.stringify(userResult));
-                sessionStorage.setItem("@AuthFirebase:token", userResult.accessToken);
+                sessionStorage.setItem("@AuthFirebase:user", user.toString());
+                sessionStorage.setItem("@AuthFirebase:token", user.token);
                 
-                navigate("/");
+                navigate("/dashboard");
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
 
-                setFailMessage(errorAuthenticatioin(errorMessage));
+                setFailMessage(errorAuthentication(errorMessage));
                 
                 console.error(`Error code ${errorCode}: ${errorMessage}`);
-            });
-        }
+            }
+        );
+    }
         
-        const signUpEmail = (email, senha) => {
-            createUserWithEmailAndPassword(firebaseApp, email, senha)
-                .then((userCredential) => {
-                const userResult = userCredential.user;
-                
-                setUser(userResult);
-                setFailMessage(null);
+    /**
+     * Create a new user with e-mail and password
+     * 
+     * @param {string} email E-mail address
+     * @param {string} senha Password
+     * @param {string} nome Display name
+     */
+    const signUpEmail = (email, senha, nome) => {
+        createUserWithEmailAndPassword(firebaseApp, email, senha)
+        .then((userCredential) => {
+            const user = new Usuario(userCredential.user);
+            updateProfile(user, {displayName: nome, photoURL: "https://faodo.ufms.br/files/2021/09/avatar.png"});
 
-                sessionStorage.setItem("@AuthFirebase:user", JSON.stringify(userResult));
-                sessionStorage.setItem("@AuthFirebase:token", userResult.accessToken);
-                
-                navigate("/");
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
+            setUser(user);
+            setFailMessage(null);
 
-                setFailMessage(errorAuthenticatioin(errorMessage));
-                
-                console.error(`Error code ${errorCode}: ${errorMessage}`);
-            });
-        }
-
-        const logout = () => {
-            signOut(firebaseApp).then(() => {
-                sessionStorage.clear();
-                setUser(null);
-            });
+            sessionStorage.setItem("@AuthFirebase:user", user);
+            sessionStorage.setItem("@AuthFirebase:token", userResult.accessToken);
             
-            navigate("/");
-        }
+            navigate("/dashboard");
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+
+            setFailMessage(errorAuthentication(errorMessage));
+            
+            console.error(`Error code ${errorCode}: ${errorMessage}`);
+        });
+    }
+
+    /**
+     * Sign out event to current user and clean cache data
+     * 
+     * @param {Event} e HandleEvent
+     */
+    const logout = e => {
+        e.preventDefault();
+
+        signOut(firebaseApp).then(() => {
+            sessionStorage.clear();
+            setUser(null);
+        });
         
-        const valuesToExport = {
-            authenticated: !!user, user, failMessage, loading, signInEmail, signUpEmail, logout
-        }
+        navigate("/");
+        window.location.reload(true);
+    }
+    
+    const valuesToExport = {
+        authenticated: !!user, user, failMessage, loading, signInEmail, signUpEmail, logout
+    }
         
-        return (
-            <AuthContext.Provider value={valuesToExport}>
+    return (
+        <AuthContext.Provider value={valuesToExport}>
             {children}
         </AuthContext.Provider>
     );

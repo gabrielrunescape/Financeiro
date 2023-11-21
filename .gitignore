@@ -29,6 +29,7 @@ build/Release
 # Dependency directories
 node_modules
 jspm_packages
+.vscode
 
 # Optional npm cache directory
 .npm
@@ -39,6 +40,7 @@ jspm_packages
 #diretórios a serem ignorados
 dist/
 node_modules/
+./vscode/
 
 # Optional REPL history
 .node_repl_history
